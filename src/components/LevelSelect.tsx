@@ -1,5 +1,6 @@
 import { HUD } from "./HUD";
 import { ArcadeButton } from "./ArcadeButton";
+import { levels } from "../data/levels";
 import navataBg from "../assets/backgrounds/navata_bg_1.jpg";
 
 interface LevelOption {
@@ -23,14 +24,18 @@ interface LevelSelectProps {
 /**
  * Pantalla de selección de niveles/pueblos. Solo Navata es jugable
  * en esta v0; el resto aparecen bloqueados como "Próximamente".
+ * La descripción y el objetivo del nivel viven aquí, para que la
+ * calle del nivel en sí quede completamente libre de texto.
  */
 export function LevelSelect({ onSelectLevel, onBack }: LevelSelectProps) {
+  const navata = levels[0];
+
   return (
     <div className="w-full h-full flex flex-col">
       <HUD credit={1} score={12580} />
 
       <div
-        className="flex-1 flex flex-col items-center justify-center gap-6 px-4 py-6 relative overflow-hidden bg-cover bg-center"
+        className="flex-1 flex flex-col items-center justify-center gap-5 px-4 py-6 relative overflow-hidden bg-cover bg-center"
         style={{ backgroundImage: `url(${navataBg})` }}
       >
         <div className="absolute inset-0 bg-[var(--pi-bg)]/55" />
@@ -61,10 +66,17 @@ export function LevelSelect({ onSelectLevel, onBack }: LevelSelectProps) {
           ))}
         </div>
 
-        <p className="relative text-[var(--pi-cream)] text-[10px] sm:text-xs opacity-70 text-center max-w-sm">
-          De momento solo Navata está disponible. El resto de pueblos
-          llegará en próximas versiones.
-        </p>
+        <div className="relative flex flex-col items-center gap-1 text-center max-w-md">
+          <p className="font-pixel text-[var(--pi-orange)] text-[10px] sm:text-xs pi-blink">
+            {navata.tagline.toUpperCase()}
+          </p>
+          <p className="text-[var(--pi-cream)] text-[10px] sm:text-xs opacity-80">
+            {navata.description}
+          </p>
+          <p className="text-[var(--pi-teal)] text-[10px] sm:text-xs mt-1">
+            Objetivo: {navata.objective} · Mini jefe: {navata.miniBoss}
+          </p>
+        </div>
 
         <div className="relative">
           <ArcadeButton onClick={onBack}>← Volver al inicio</ArcadeButton>
