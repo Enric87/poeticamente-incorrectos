@@ -1,7 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { AdriSprite } from "./AdriSprite";
-import { characters } from "../data/characters";
-import navataBg from "../assets/backgrounds/navata_bg_3.jpg";
 import logoFull from "../assets/logo_full.png";
 
 const splashLines = [
@@ -12,7 +9,7 @@ const splashLines = [
   "Hacer más ruido.",
 ];
 
-type Stage = "logo" | "text" | "scene" | "chase";
+type Stage = "logo" | "text";
 
 interface SplashIntroProps {
   onFinished: () => void;
@@ -39,18 +36,10 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
       const t = setTimeout(() => setLineIndex((i) => i + 1), 1800);
       return () => clearTimeout(t);
     } else {
-      const t = setTimeout(() => setStage("scene"), 600);
+      const t = setTimeout(() => onFinishedRef.current(), 800);
       return () => clearTimeout(t);
     }
   }, [stage, lineIndex]);
-
-  // Escena banda + camión
-  useEffect(() => {
-    if (stage !== "scene") return;
-    const t1 = setTimeout(() => setStage("chase"), 3500);
-    const t2 = setTimeout(() => onFinishedRef.current(), 5800);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [stage]);
 
   const skip = () => onFinishedRef.current();
 
@@ -98,42 +87,6 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
         </div>
       )}
 
-      {/* ESCENA BANDA */}
-      {(stage === "scene" || stage === "chase") && (
-        <div
-          className="relative w-full h-full flex flex-col items-center justify-center bg-cover bg-center"
-          style={{ backgroundImage: `url(${navataBg})` }}
-        >
-          <div className="absolute inset-0 bg-[var(--pi-bg)]/40" />
-          <div className="relative z-10 w-full h-44 sm:h-60 flex items-end justify-center gap-1 pi-enter-left">
-            <AdriSprite animation="run" className="w-16 sm:w-24" />
-            {characters.filter((c) => c.id !== "adri").map((c) => (
-              <img
-                key={c.id}
-                src={c.portrait}
-                alt={c.name}
-                draggable={false}
-                className="w-16 sm:w-24 object-contain drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]"
-                style={{ imageRendering: "pixelated" }}
-              />
-            ))}
-          </div>
-          {stage === "chase" && (
-            <div
-              className="absolute right-[-20%] bottom-[18%] font-pixel text-3xl sm:text-5xl z-10"
-              style={{ animation: "pi-truck-flee 1.8s ease-in forwards" }}
-            >
-              🚚💨
-            </div>
-          )}
-          <style>{`
-            @keyframes pi-truck-flee {
-              0% { transform: translateX(0); opacity: 1; }
-              100% { transform: translateX(60vw); opacity: 0; }
-            }
-          `}</style>
-        </div>
-      )}
 
       {/* Skip */}
       <p className="absolute bottom-3 right-4 font-pixel text-[9px] sm:text-[11px] text-[var(--pi-cream)] opacity-40">
