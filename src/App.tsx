@@ -47,7 +47,7 @@ function App() {
 
         {screen === "start" && (
           <StartScreen
-            onPlay={() => goTo("intro")}
+            onPlay={() => goTo("levelSelect")}
             onSelectCharacter={() => goTo("select")}
             onToggleMute={toggleMute}
             muted={muted}
@@ -59,10 +59,6 @@ function App() {
             onConfirm={() => goTo("intro")}
             onBack={() => goTo("start")}
           />
-        )}
-
-        {screen === "intro" && (
-          <IntroSequence onFinished={() => goTo("levelSelect")} />
         )}
 
         {screen === "levelSelect" && (
