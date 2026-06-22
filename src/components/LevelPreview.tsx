@@ -10,7 +10,7 @@ interface LevelPreviewProps {
   onBackToStart: () => void;
 }
 
-const MOVE_SPEED = 0.28; // % del ancho de pantalla por frame
+const MOVE_SPEED = 0.18; // % del ancho de pantalla por frame
 const JUMP_HEIGHT = 18; // % de salto vertical
 const JUMP_DURATION = 480; // ms de duración total del salto
 const MIN_X = 4;
@@ -94,7 +94,7 @@ export function LevelPreview({ onBackToStart }: LevelPreviewProps) {
 
         {/* Adri controlable */}
         <div
-          className="absolute bottom-[6%] w-16 sm:w-24"
+          className="absolute bottom-[13%] w-16 sm:w-24"
           style={{ left: `${posX}%`, transform: `translateY(${-jumpOffset}%)` }}
         >
           <AdriSprite animation={animation} flip={facing === "left"} />
@@ -111,14 +111,14 @@ export function LevelPreview({ onBackToStart }: LevelPreviewProps) {
         </div>
 
         {/* Indicador de controles, discreto abajo a la izquierda */}
-        <div className="absolute bottom-3 left-4 font-pixel text-[8px] sm:text-[10px] text-[var(--pi-cream)]/70 bg-[var(--pi-brown-dark)]/70 px-2 py-1 border border-[var(--pi-cream)]/30">
+        <div className="absolute bottom-3 left-4 font-pixel text-[8px] sm:text-[10px] text-[var(--pi-cream)] bg-[var(--pi-brown-dark)] px-2 py-1 border border-[var(--pi-cream)]/60">
           ← → MOVER · ESPACIO SALTAR
         </div>
 
         {/* Volver al inicio, discreto abajo a la derecha */}
         <button
           onClick={onBackToStart}
-          className="absolute bottom-3 right-4 font-pixel text-[8px] sm:text-[10px] text-[var(--pi-cream)]/70 bg-[var(--pi-brown-dark)]/70 px-2 py-1 border border-[var(--pi-cream)]/30 hover:text-[var(--pi-orange)] hover:border-[var(--pi-orange)]"
+          className="absolute bottom-3 right-4 font-pixel text-[8px] sm:text-[10px] text-[var(--pi-cream)] bg-[var(--pi-brown-dark)] px-2 py-1 border border-[var(--pi-cream)]/60 hover:text-[var(--pi-orange)] hover:border-[var(--pi-orange)]"
         >
           ← VOLVER
         </button>
