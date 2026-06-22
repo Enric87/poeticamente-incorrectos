@@ -1,14 +1,15 @@
 import { useRef, useState } from "react";
+import { SplashIntro } from "./components/SplashIntro";
 import { StartScreen } from "./components/StartScreen";
 import { IntroSequence } from "./components/IntroSequence";
 import { LevelSelect } from "./components/LevelSelect";
 import { LevelPreview } from "./components/LevelPreview";
 import { CharacterSelect } from "./components/CharacterSelect";
 
-type Screen = "start" | "select" | "intro" | "levelSelect" | "level";
+type Screen = "splash" | "start" | "select" | "intro" | "levelSelect" | "level";
 
 function App() {
-  const [screen, setScreen] = useState<Screen>("start");
+  const [screen, setScreen] = useState<Screen>("splash");
   const audioRef = useRef<HTMLAudioElement>(null);
   const [muted, setMuted] = useState(false);
 
@@ -39,6 +40,10 @@ function App() {
     <div className="w-full min-h-screen flex items-center justify-center bg-black p-2 sm:p-6">
       <audio ref={audioRef} src="/music-start.mp3" loop />
       <div className="crt-screen w-full max-w-5xl h-[92vh] sm:h-auto sm:aspect-video border-4 sm:border-8 border-[var(--pi-brown-dark)] rounded-md overflow-hidden">
+
+        {screen === "splash" && (
+          <SplashIntro onFinished={() => { startMusic(); goTo("start"); }} />
+        )}
 
         {screen === "start" && (
           <StartScreen
