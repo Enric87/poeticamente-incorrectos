@@ -45,7 +45,8 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
 
   return (
     <div
-      className="relative w-full h-full flex flex-col items-center justify-center bg-[var(--pi-bg)] overflow-hidden cursor-pointer"
+      className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden cursor-pointer"
+      style={{ background: "#000000" }}
       onClick={skip}
     >
       {/* LOGO */}
