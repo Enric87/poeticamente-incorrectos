@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AdriSprite } from "./AdriSprite";
 import { characters } from "../data/characters";
 import navataBg from "../assets/backgrounds/navata_bg_3.jpg";
-import logoHead from "../assets/logo_head.png";
+import logoFull from "../assets/logo_full.png";
 
 const splashLines = [
   "Los Correctos Supremos han robado los instrumentos.",
@@ -61,18 +61,14 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
     >
       {/* LOGO */}
       {stage === "logo" && (
-        <div className={`flex flex-col items-center gap-4 transition-opacity duration-700 ${logoVisible ? "opacity-100" : "opacity-0"}`}>
+        <div className={`flex flex-col items-center gap-2 transition-opacity duration-700 ${logoVisible ? "opacity-100" : "opacity-0"}`}>
           <img
-            src={logoHead}
+            src={logoFull}
             alt="Poéticamente Incorrectos"
-            className="w-28 sm:w-40 glitch-text drop-shadow-[0_0_30px_var(--pi-orange)]"
-            style={{ imageRendering: "pixelated" }}
+            className="w-48 sm:w-72 drop-shadow-[0_0_40px_rgba(255,120,0,0.5)]"
+            style={{ mixBlendMode: "screen" }}
           />
-          <h1 className="glitch-text font-pixel text-2xl sm:text-4xl text-center text-[var(--pi-cream)] drop-shadow-[3px_3px_0_var(--pi-bg)]"
-            data-text="POÉTICAMENTE INCORRECTOS">
-            POÉTICAMENTE<br />INCORRECTOS
-          </h1>
-          <p className="font-pixel text-[var(--pi-teal)] text-xs sm:text-sm tracking-widest uppercase">
+          <p className="font-pixel text-[var(--pi-teal)] text-xs sm:text-sm tracking-widest uppercase mt-2">
             — The Video Game —
           </p>
         </div>
