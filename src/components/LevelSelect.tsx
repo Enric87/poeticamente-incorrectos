@@ -2,15 +2,17 @@ import { HUD } from "./HUD";
 import { ArcadeButton } from "./ArcadeButton";
 import { levels } from "../data/levels";
 import navataBg from "../assets/backgrounds/navata_bg_1.jpg";
+import navataCard from "../assets/backgrounds/navata_level_card.jpg";
 
 interface LevelOption {
   id: string;
   name: string;
   available: boolean;
+  thumbnail?: string;
 }
 
 const levelOptions: LevelOption[] = [
-  { id: "navata", name: "Navata", available: true },
+  { id: "navata", name: "Navata", available: true, thumbnail: navataCard },
   { id: "terrades", name: "Terrades", available: false },
   { id: "cabanelles", name: "Cabanelles", available: false },
   { id: "figueres", name: "Figueres", available: false },
@@ -23,9 +25,8 @@ interface LevelSelectProps {
 
 /**
  * Pantalla de selección de niveles/pueblos. Solo Navata es jugable
- * en esta v0; el resto aparecen bloqueados como "Próximamente".
- * La descripción y el objetivo del nivel viven aquí, para que la
- * calle del nivel en sí quede completamente libre de texto.
+ * en esta v0, con su propia miniatura ilustrada; el resto aparecen
+ * bloqueados como "Próximamente" con placeholder oscuro.
  */
 export function LevelSelect({ onSelectLevel, onBack }: LevelSelectProps) {
   const navata = levels[0];
@@ -50,15 +51,23 @@ export function LevelSelect({ onSelectLevel, onBack }: LevelSelectProps) {
               key={lvl.id}
               onClick={lvl.available ? () => onSelectLevel(lvl.id) : undefined}
               disabled={!lvl.available}
-              className={`font-pixel flex flex-col items-center justify-center gap-2 py-6 border-4 transition-all ${
+              className={`relative font-pixel flex flex-col items-center justify-center gap-2 py-6 border-4 overflow-hidden transition-all bg-cover bg-center ${
                 lvl.available
-                  ? "cursor-pointer border-[var(--pi-orange)] bg-[var(--pi-bg-soft)] hover:-translate-y-1 text-[var(--pi-cream)]"
+                  ? "cursor-pointer border-[var(--pi-orange)] hover:-translate-y-1 text-[var(--pi-cream)]"
                   : "cursor-not-allowed border-[var(--pi-brown)] bg-[var(--pi-bg)] text-[var(--pi-cream)] opacity-50"
               }`}
+              style={
+                lvl.thumbnail ? { backgroundImage: `url(${lvl.thumbnail})` } : undefined
+              }
             >
-              <span className="text-xs sm:text-base">{lvl.name.toUpperCase()}</span>
+              {lvl.thumbnail && (
+                <div className="absolute inset-0 bg-[var(--pi-bg)]/35" />
+              )}
+              <span className="relative text-xs sm:text-base drop-shadow-[1px_1px_0_var(--pi-bg)]">
+                {lvl.name.toUpperCase()}
+              </span>
               {!lvl.available && (
-                <span className="text-[8px] sm:text-[9px] text-[var(--pi-red)] pi-blink">
+                <span className="relative text-[8px] sm:text-[9px] text-[var(--pi-red)] pi-blink">
                   PRÓXIMAMENTE
                 </span>
               )}

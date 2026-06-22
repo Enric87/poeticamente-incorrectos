@@ -10,7 +10,7 @@ interface LevelPreviewProps {
   onBackToStart: () => void;
 }
 
-const MOVE_SPEED = 0.45; // % del ancho de pantalla por frame
+const MOVE_SPEED = 0.28; // % del ancho de pantalla por frame
 const JUMP_HEIGHT = 18; // % de salto vertical
 const JUMP_DURATION = 480; // ms de duración total del salto
 const MIN_X = 4;
@@ -101,8 +101,8 @@ export function LevelPreview({ onBackToStart }: LevelPreviewProps) {
         </div>
 
         {/* Título del nivel, esquina superior izquierda */}
-        <div className="absolute top-4 left-4 font-pixel text-[10px] sm:text-sm text-[var(--pi-red)] bg-[var(--pi-brown-dark)]/90 px-3 py-1 border-2 border-[var(--pi-red)]">
-          NIVEL {level.number} — {level.name.toUpperCase()}
+        <div className="absolute top-4 left-4 font-pixel text-[10px] sm:text-sm text-[var(--pi-cream)] bg-[var(--pi-brown-dark)]/90 px-3 py-1 border-2 border-[var(--pi-cream)]">
+          NIVEL {level.number}
         </div>
 
         {/* Letrero NAVATA, esquina superior derecha */}
