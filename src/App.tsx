@@ -5,23 +5,24 @@ import { LevelSelect } from "./components/LevelSelect";
 import { LevelPreview } from "./components/LevelPreview";
 import { CharacterSelect } from "./components/CharacterSelect";
 
-type Screen = "pressStart" | "start" | "select" | "intro" | "levelSelect" | "level";
+type Screen = "start" | "select" | "intro" | "levelSelect" | "level";
 
 function App() {
-  const [screen, setScreen] = useState<Screen>("pressStart");
+  const [screen, setScreen] = useState<Screen>("start");
   const audioRef = useRef<HTMLAudioElement>(null);
   const [muted, setMuted] = useState(false);
 
-  const handlePressStart = () => {
+  const startMusic = () => {
     const audio = audioRef.current;
-    if (audio) {
-      audio.volume = 0.6;
-      audio.play().catch(() => {});
-    }
-    setScreen("start");
+    if (!audio || muted) return;
+    audio.volume = 0.6;
+    audio.play().catch(() => {});
   };
 
-  const goTo = (next: Screen) => setScreen(next);
+  const goTo = (next: Screen) => {
+    startMusic();
+    setScreen(next);
+  };
 
   const toggleMute = () => {
     const audio = audioRef.current;
@@ -38,20 +39,6 @@ function App() {
     <div className="w-full min-h-screen flex items-center justify-center bg-black p-2 sm:p-6">
       <audio ref={audioRef} src="/music-start.mp3" loop />
       <div className="crt-screen w-full max-w-5xl h-[92vh] sm:h-auto sm:aspect-video border-4 sm:border-8 border-[var(--pi-brown-dark)] rounded-md overflow-hidden">
-
-        {screen === "pressStart" && (
-          <div
-            className="w-full h-full flex flex-col items-center justify-center bg-black cursor-pointer select-none"
-            onClick={handlePressStart}
-          >
-            <p className="font-pixel text-[var(--pi-orange)] text-xl sm:text-3xl pi-blink tracking-widest uppercase">
-              — Press Start —
-            </p>
-            <p className="font-pixel text-[var(--pi-cream)] text-[10px] sm:text-xs mt-4 opacity-50">
-              Haz clic para empezar
-            </p>
-          </div>
-        )}
 
         {screen === "start" && (
           <StartScreen
