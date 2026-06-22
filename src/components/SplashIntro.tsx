@@ -61,17 +61,27 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
     >
       {/* LOGO */}
       {stage === "logo" && (
-        <div className={`flex flex-col items-center gap-2 transition-opacity duration-700 ${logoVisible ? "opacity-100" : "opacity-0"}`}>
-          <img
-            src={logoFull}
-            alt="Poéticamente Incorrectos"
-            className="w-48 sm:w-72 drop-shadow-[0_0_40px_rgba(255,120,0,0.5)]"
-            style={{ mixBlendMode: "screen" }}
-          />
-          <p className="font-pixel text-[var(--pi-teal)] text-xs sm:text-sm tracking-widest uppercase mt-2">
-            — The Video Game —
-          </p>
-        </div>
+        <>
+          <style>{`
+            @keyframes logo-grow {
+              0%   { transform: scale(0.15); opacity: 0; }
+              30%  { opacity: 1; }
+              100% { transform: scale(1); opacity: 1; }
+            }
+            .logo-grow { animation: logo-grow 2.2s cubic-bezier(0.22,1,0.36,1) forwards; }
+          `}</style>
+          <div className="flex flex-col items-center gap-2 logo-grow">
+            <img
+              src={logoFull}
+              alt="Poéticamente Incorrectos"
+              className="w-48 sm:w-72 drop-shadow-[0_0_40px_rgba(255,120,0,0.6)]"
+              style={{ mixBlendMode: "multiply" }}
+            />
+            <p className="font-pixel text-[var(--pi-teal)] text-xs sm:text-sm tracking-widest uppercase mt-2">
+              — The Video Game —
+            </p>
+          </div>
+        </>
       )}
 
       {/* TEXTO */}
