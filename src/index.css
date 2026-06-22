@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   POÉTICAMENTE INCORRECTOS — THE VIDEO GAME
+   Tokens de diseño: atardecer punk en pueblo catalán + arcade CRT
+   ============================================================ */
+
+:root {
+  /* Paleta */
+  --pi-bg: #1a1410; /* negro cálido, fondo CRT */
+  --pi-bg-soft: #251c16;
+  --pi-orange: #ff6b1a; /* atardecer / HUD activo */
+  --pi-orange-dim: #b54d12;
+  --pi-cream: #e8d4a8; /* texto sobre oscuro, fachadas */
+  --pi-teal: #2dd4bf; /* moicano del logo, detalles punk */
+  --pi-red: #c4283f; /* alertas, Correctos Supremos */
+  --pi-brown: #3d3024; /* UI secundaria, marcos */
+  --pi-brown-dark: #241a12;
+
+  --font-pixel: "Press Start 2P", monospace;
+  --font-punk: "Oswald", sans-serif;
+}
+
+html,
+body {
+  background: var(--pi-bg);
+  font-family: var(--font-punk);
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ---------- Utilidades de fuente ---------- */
+.font-pixel {
+  font-family: var(--font-pixel);
+}
+.font-punk {
+  font-family: var(--font-punk);
+}
+
+/* ---------- Marco arcade tipo monitor CRT ---------- */
+.crt-screen {
+  position: relative;
+  background: var(--pi-bg);
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 8vmin rgba(0, 0, 0, 0.85),
+    inset 0 0 1.5vmin rgba(0, 0, 0, 0.9);
+}
+
+.crt-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.18) 0px,
+    rgba(0, 0, 0, 0.18) 1px,
+    transparent 2px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+.crt-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 51;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+@keyframes crt-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.92;
+  }
+  94% {
+    opacity: 1;
+  }
+}
+
+.crt-flicker {
+  animation: crt-flicker 6s infinite;
+}
+
+/* ---------- Glitch de texto ---------- */
+@keyframes glitch-shift {
+  0%,
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0, 0);
+  }
+  20% {
+    clip-path: inset(10% 0 60% 0);
+    transform: translate(-2px, 1px);
+  }
+  40% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(2px, -1px);
+  }
+  60% {
+    clip-path: inset(30% 0 40% 0);
+    transform: translate(-1px, 0);
+  }
+  80% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0, 0);
+  }
+}
+
+.glitch-text {
+  position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0.85;
+}
+
+.glitch-text::before {
+  color: var(--pi-teal);
+  animation: glitch-shift 2.4s infinite linear;
+  animation-delay: 0.1s;
+}
+
+.glitch-text::after {
+  color: var(--pi-red);
+  animation: glitch-shift 2.4s infinite linear reverse;
+  animation-delay: 0.3s;
+}
+
+/* ---------- Parpadeo arcade (blink) ---------- */
+@keyframes pi-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.pi-blink {
+  animation: pi-blink 1s steps(1) infinite;
+}
+
+/* ---------- Vibración del botón ---------- */
+@keyframes pi-shake {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate(-2px, 1px) rotate(-1deg);
+  }
+  40% {
+    transform: translate(2px, -1px) rotate(1deg);
+  }
+  60% {
+    transform: translate(-1px, 2px) rotate(0deg);
+  }
+  80% {
+    transform: translate(1px, -2px) rotate(1deg);
+  }
+}
+
+.pi-shake-hover:hover {
+  animation: pi-shake 0.25s infinite;
+}
+
+/* ---------- Luces de marquesina arcade ---------- */
+@keyframes pi-marquee-light {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.pi-marquee-bulb {
+  animation: pi-marquee-light 1.4s infinite ease-in-out;
+}
+
+/* ---------- Entrada de personajes (slide + bounce) ---------- */
+@keyframes pi-enter-left {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  70% {
+    transform: translateX(4%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.pi-enter-left {
+  animation: pi-enter-left 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
+}
+
+/* ---------- Idle bob para sprite estático ---------- */
+@keyframes pi-idle-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.pi-idle-bob {
+  animation: pi-idle-bob 1.8s ease-in-out infinite;
+}
+
+/* ---------- Scrollbar discreto ---------- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--pi-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--pi-brown);
+}
