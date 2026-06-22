@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { StartScreen } from "./components/StartScreen";
 import { IntroSequence } from "./components/IntroSequence";
+import { LevelSelect } from "./components/LevelSelect";
 import { LevelPreview } from "./components/LevelPreview";
 import { CharacterSelect } from "./components/CharacterSelect";
 
-type Screen = "start" | "select" | "intro" | "level";
+type Screen = "start" | "select" | "intro" | "levelSelect" | "level";
 
 function App() {
   const [screen, setScreen] = useState<Screen>("start");
@@ -28,7 +29,14 @@ function App() {
         )}
 
         {screen === "intro" && (
-          <IntroSequence onFinished={() => setScreen("level")} />
+          <IntroSequence onFinished={() => setScreen("levelSelect")} />
+        )}
+
+        {screen === "levelSelect" && (
+          <LevelSelect
+            onSelectLevel={() => setScreen("level")}
+            onBack={() => setScreen("start")}
+          />
         )}
 
         {screen === "level" && (

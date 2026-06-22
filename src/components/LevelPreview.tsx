@@ -92,7 +92,7 @@ export function LevelPreview({ onBackToStart }: LevelPreviewProps) {
       {!showComingSoon ? (
         <div className="relative flex-1 flex flex-col overflow-hidden">
           <div
-            className="relative flex-1 overflow-hidden bg-cover bg-bottom outline-none"
+            className="relative flex-1 overflow-hidden bg-cover bg-center outline-none"
             style={{ backgroundImage: `url(${navataBg})` }}
             tabIndex={0}
           >
