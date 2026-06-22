@@ -54,8 +54,8 @@ function SceneTransition({ onContinue }: { onContinue: () => void }) {
   const [stage, setStage] = useState<"enter" | "chase">("enter");
 
   useEffect(() => {
-    const t1 = setTimeout(() => setStage("chase"), 1600);
-    const t2 = setTimeout(() => onContinue(), 3400);
+    const t1 = setTimeout(() => setStage("chase"), 3500);
+    const t2 = setTimeout(() => onContinue(), 6000);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
