@@ -2,6 +2,10 @@
 // En esta v0 solo Adri es jugable; el resto queda como placeholder
 // "Próximamente" para no bloquear el flujo cuando se añadan.
 
+import toniPortrait from "../assets/sprites/toni_portrait.png";
+import srPerezPortrait from "../assets/sprites/sr_perez_portrait.png";
+import eduPortrait from "../assets/sprites/edu_portrait.png";
+
 export interface Character {
   id: string;
   name: string;
@@ -10,6 +14,7 @@ export interface Character {
   special: string;
   color: string; // color de acento para su tarjeta / efectos
   playable: boolean;
+  portrait?: string; // retrato estático (solo personajes no jugables aún)
 }
 
 export const characters: Character[] = [
@@ -30,6 +35,7 @@ export const characters: Character[] = [
     special: "Solo eléctrico",
     color: "var(--pi-teal)",
     playable: false,
+    portrait: toniPortrait,
   },
   {
     id: "sr-perez",
@@ -39,6 +45,7 @@ export const characters: Character[] = [
     special: "Onda expansiva",
     color: "var(--pi-red)",
     playable: false,
+    portrait: srPerezPortrait,
   },
   {
     id: "edu",
@@ -48,5 +55,6 @@ export const characters: Character[] = [
     special: "Lluvia de baquetas",
     color: "var(--pi-cream)",
     playable: false,
+    portrait: eduPortrait,
   },
 ];

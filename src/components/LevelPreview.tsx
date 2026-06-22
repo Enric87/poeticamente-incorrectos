@@ -1,20 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { levels } from "../data/levels";
 import { AdriSprite } from "./AdriSprite";
 import { HUD } from "./HUD";
+import navataBg from "../assets/backgrounds/navata_bg_1.jpg";
 
 interface LevelPreviewProps {
   onBackToStart: () => void;
 }
 
 /**
- * Preview conceptual del Nivel 1 - Navata.
- * Solo escenario + Adri caminando (sin enemigos en esta v0).
- * Termina en pantalla "Próximamente" con vuelta al inicio.
+ * Preview del Nivel 1 - Navata, con el fondo ilustrado real
+ * y Adri recorriendo la calle (animación de correr real).
+ * Sin enemigos todavía en esta v0.
  */
 export function LevelPreview({ onBackToStart }: LevelPreviewProps) {
   const [showComingSoon, setShowComingSoon] = useState(false);
+  const [walkPos, setWalkPos] = useState(8); // % desde la izquierda
   const level = levels[0];
+
+  // Adri camina lentamente de izquierda a derecha por la escena
+  useEffect(() => {
+    if (showComingSoon) return;
+    const interval = setInterval(() => {
+      setWalkPos((p) => (p >= 70 ? 8 : p + 0.4));
+    }, 60);
+    return () => clearInterval(interval);
+  }, [showComingSoon]);
 
   return (
     <div className="relative w-full h-full flex flex-col">
@@ -22,60 +33,24 @@ export function LevelPreview({ onBackToStart }: LevelPreviewProps) {
 
       {!showComingSoon ? (
         <div className="relative flex-1 flex flex-col overflow-hidden">
-          {/* Escenario: calle de Navata al atardecer */}
+          {/* Escenario real: calle de Navata al atardecer */}
           <div
-            className="relative flex-1 overflow-hidden"
-            style={{
-              background:
-                "linear-gradient(to bottom, #4a2d4a 0%, #b5452e 40%, #ff8c3a 65%, #2a1d14 100%)",
-            }}
+            className="relative flex-1 overflow-hidden bg-cover bg-bottom"
+            style={{ backgroundImage: `url(${navataBg})` }}
           >
-            {/* Cables eléctricos */}
-            <svg
-              className="absolute top-0 left-0 w-full h-1/3 opacity-70"
-              viewBox="0 0 400 60"
-              preserveAspectRatio="none"
+            {/* Sombra de suelo para asentar al personaje */}
+            <div className="absolute bottom-0 left-0 w-full h-[22%] bg-gradient-to-t from-black/50 to-transparent" />
+
+            {/* Adri caminando por la calle */}
+            <div
+              className="absolute bottom-[6%] w-16 sm:w-24 transition-[left] ease-linear"
+              style={{ left: `${walkPos}%`, transitionDuration: "60ms" }}
             >
-              <path d="M0 8 Q 100 40 200 14 T 400 20" stroke="#15110e" strokeWidth="2" fill="none" />
-            </svg>
-
-            {/* Fachadas con carteles punk */}
-            <div className="absolute bottom-0 left-0 w-full flex items-end h-2/3">
-              {[...Array(6)].map((_, i) => (
-                <div
-                  key={i}
-                  className="relative flex-1 bg-[var(--pi-brown-dark)] border-t-2 border-[#0d0a08]"
-                  style={{ height: `${55 + ((i * 11) % 30)}%`, marginLeft: "-1px" }}
-                >
-                  {i === 1 && (
-                    <div className="absolute top-2 left-1 right-1 bg-[var(--pi-red)] text-[6px] sm:text-[8px] font-pixel text-center py-1 text-[var(--pi-cream)] rotate-[-2deg]">
-                      RUIDO = LIBERTAD
-                    </div>
-                  )}
-                  {i === 3 && (
-                    <div className="absolute top-3 left-1 right-1 text-[6px] sm:text-[8px] font-pixel text-center text-[var(--pi-teal)] rotate-[1deg]">
-                      BAR CERRADO
-                    </div>
-                  )}
-                  {i === 4 && (
-                    <div className="absolute top-2 left-1 right-1 bg-[var(--pi-cream)] text-[6px] sm:text-[8px] font-pixel text-center py-1 text-[var(--pi-bg)] rotate-[2deg]">
-                      PUNK NO MUERE
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Suelo / acera */}
-            <div className="absolute bottom-0 left-0 w-full h-6 sm:h-8 bg-[#0d0a08] border-t-2 border-[var(--pi-brown)]" />
-
-            {/* Adri caminando */}
-            <div className="absolute bottom-6 sm:bottom-8 left-[10%] w-14 sm:w-20">
-              <AdriSprite />
+              <AdriSprite animation="run" />
             </div>
 
             {/* Letrero NAVATA */}
-            <div className="absolute top-4 right-4 font-pixel text-[10px] sm:text-sm text-[var(--pi-cream)] bg-[var(--pi-brown-dark)] px-3 py-1 border-2 border-[var(--pi-cream)]">
+            <div className="absolute top-4 right-4 font-pixel text-[10px] sm:text-sm text-[var(--pi-cream)] bg-[var(--pi-brown-dark)]/90 px-3 py-1 border-2 border-[var(--pi-cream)]">
               NAVATA
             </div>
           </div>

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { introLines } from "../data/levels";
 import { AdriSprite } from "./AdriSprite";
+import { characters } from "../data/characters";
+import navataBg from "../assets/backgrounds/navata_bg_3.jpg";
+import heroShout from "../assets/sprites/adri_hero_shout.png";
 
 interface IntroSequenceProps {
   onFinished: () => void;
@@ -8,7 +11,7 @@ interface IntroSequenceProps {
 
 /**
  * Secuencia de intro narrativa. Avanza sola línea a línea y al terminar
- * muestra la entrada de Adri + camión enemigo antes de pasar al nivel.
+ * muestra la entrada de la banda + camión enemigo antes de pasar al nivel.
  */
 export function IntroSequence({ onFinished }: IntroSequenceProps) {
   const [lineIndex, setLineIndex] = useState(0);
@@ -48,45 +51,73 @@ export function IntroSequence({ onFinished }: IntroSequenceProps) {
 }
 
 function SceneTransition({ onContinue }: { onContinue: () => void }) {
-  const [stage, setStage] = useState<"enter" | "chase" | "level-card">("enter");
+  const [stage, setStage] = useState<"enter" | "shout" | "chase" | "level-card">(
+    "enter"
+  );
 
   useEffect(() => {
-    const t1 = setTimeout(() => setStage("chase"), 1600);
-    const t2 = setTimeout(() => setStage("level-card"), 3400);
+    const t1 = setTimeout(() => setStage("shout"), 1400);
+    const t2 = setTimeout(() => setStage("chase"), 2600);
+    const t3 = setTimeout(() => setStage("level-card"), 4400);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
+      clearTimeout(t3);
     };
   }, []);
 
-  return (
-    <div className="relative w-full h-full flex flex-col items-center justify-center">
-      {(stage === "enter" || stage === "chase") && (
-        <div className="relative w-full h-40 sm:h-56 flex items-end justify-center">
-          {/* Banda entrando en escena */}
-          <div className="flex items-end gap-1 pi-enter-left">
-            <AdriSprite className="w-14 sm:w-20" shouting />
-            {[...Array(3)].map((_, i) => (
-              <div
-                key={i}
-                className="w-12 sm:w-16 h-20 sm:h-28 border-2 border-dashed border-[var(--pi-brown)] flex items-center justify-center text-[var(--pi-cream)] opacity-50 font-pixel text-[10px]"
-              >
-                ?
-              </div>
-            ))}
-          </div>
+  const restOfBand = characters.filter((c) => c.id !== "adri");
 
-          {/* Camión enemigo escapando */}
-          {stage === "chase" && (
-            <div
-              className="absolute right-[-20%] bottom-2 font-pixel text-3xl sm:text-5xl"
-              style={{
-                animation: "pi-truck-flee 1.8s ease-in forwards",
-              }}
-            >
-              🚚💨
-            </div>
-          )}
+  return (
+    <div
+      className="relative w-full h-full flex flex-col items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: stage !== "level-card" ? `url(${navataBg})` : undefined }}
+    >
+      {stage !== "level-card" && (
+        <div className="absolute inset-0 bg-[var(--pi-bg)]/40" />
+      )}
+
+      {stage === "enter" && (
+        <div className="relative z-10 w-full h-44 sm:h-60 flex items-end justify-center gap-1 pi-enter-left">
+          <AdriSprite animation="run" className="w-16 sm:w-24" />
+          {restOfBand.map((c) => (
+            <img
+              key={c.id}
+              src={c.portrait}
+              alt={c.name}
+              draggable={false}
+              className="h-20 sm:h-28 object-contain grayscale-0 drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]"
+              style={{ imageRendering: "pixelated" }}
+            />
+          ))}
+        </div>
+      )}
+
+      {stage === "shout" && (
+        <div className="relative z-10 flex flex-col items-center gap-3">
+          <img
+            src={heroShout}
+            alt="Adri grito sónico"
+            className="w-48 sm:w-64 drop-shadow-[0_6px_10px_rgba(0,0,0,0.6)]"
+            draggable={false}
+          />
+          <p className="font-pixel text-[var(--pi-orange)] text-sm sm:text-lg pi-blink">
+            ¡QUE EMPIECE EL RUIDO!
+          </p>
+        </div>
+      )}
+
+      {stage === "chase" && (
+        <div className="relative z-10 w-full h-44 sm:h-60 flex items-end justify-center">
+          <div className="flex items-end gap-1">
+            <AdriSprite animation="run" className="w-16 sm:w-24" />
+          </div>
+          <div
+            className="absolute right-[-20%] bottom-2 font-pixel text-3xl sm:text-5xl"
+            style={{ animation: "pi-truck-flee 1.8s ease-in forwards" }}
+          >
+            🚚💨
+          </div>
           <style>
             {`
               @keyframes pi-truck-flee {

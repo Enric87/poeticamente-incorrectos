@@ -14,10 +14,10 @@ export function CharacterCard({ character, selected, onSelect }: CharacterCardPr
     <button
       onClick={character.playable ? onSelect : undefined}
       disabled={!character.playable}
-      className={`relative font-punk flex flex-col items-center w-32 sm:w-40 p-3 border-4 transition-all ${
+      className={`relative font-punk flex flex-col items-center w-32 sm:w-40 p-3 border-4 transition-all overflow-hidden ${
         character.playable
           ? "cursor-pointer hover:-translate-y-1"
-          : "cursor-not-allowed opacity-50"
+          : "cursor-not-allowed"
       } ${
         selected
           ? "border-[var(--pi-orange)] bg-[var(--pi-bg-soft)]"
@@ -27,14 +27,18 @@ export function CharacterCard({ character, selected, onSelect }: CharacterCardPr
         boxShadow: selected ? `0 0 0 2px ${character.color} inset` : undefined,
       }}
     >
-      <div className="w-16 h-20 sm:w-20 sm:h-24 mb-2">
+      <div className="relative w-20 h-24 sm:w-24 sm:h-28 mb-2 flex items-end justify-center">
         {isAdri ? (
-          <AdriSprite />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center border-2 border-dashed border-[var(--pi-brown)] text-[var(--pi-cream)] opacity-60 text-2xl">
-            ?
-          </div>
-        )}
+          <AdriSprite className="h-full" />
+        ) : character.portrait ? (
+          <img
+            src={character.portrait}
+            alt={character.name}
+            draggable={false}
+            className="h-full object-contain grayscale opacity-50"
+            style={{ imageRendering: "pixelated" }}
+          />
+        ) : null}
       </div>
 
       <span
