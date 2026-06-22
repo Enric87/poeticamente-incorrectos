@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StartScreen } from "./components/StartScreen";
 import { IntroSequence } from "./components/IntroSequence";
 import { LevelSelect } from "./components/LevelSelect";
@@ -22,8 +22,14 @@ function App() {
     }).catch(() => {});
   };
 
+  // Arranca la música en el primer clic en cualquier parte de la pantalla
+  useEffect(() => {
+    const handler = () => startMusic();
+    window.addEventListener("click", handler, { once: true });
+    return () => window.removeEventListener("click", handler);
+  }, []);
+
   const goTo = (next: Screen) => {
-    startMusic();
     setScreen(next);
   };
 
