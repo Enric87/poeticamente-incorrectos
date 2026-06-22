@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AdriSprite } from "./AdriSprite";
 import { characters } from "../data/characters";
 import navataBg from "../assets/backgrounds/navata_bg_3.jpg";
@@ -22,6 +22,8 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
   const [stage, setStage] = useState<Stage>("logo");
   const [lineIndex, setLineIndex] = useState(0);
   const [logoVisible, setLogoVisible] = useState(false);
+  const onFinishedRef = useRef(onFinished);
+  onFinishedRef.current = onFinished;
 
   // Logo aparece
   useEffect(() => {
@@ -46,11 +48,11 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
   useEffect(() => {
     if (stage !== "scene") return;
     const t1 = setTimeout(() => setStage("chase"), 3500);
-    const t2 = setTimeout(() => onFinished(), 5800);
+    const t2 = setTimeout(() => onFinishedRef.current(), 5800);
     return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [stage, onFinished]);
+  }, [stage]);
 
-  const skip = () => onFinished();
+  const skip = () => onFinishedRef.current();
 
   return (
     <div
