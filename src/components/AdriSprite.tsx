@@ -21,7 +21,7 @@ export function AdriSprite({
   const frames = adriFrames[animation];
   const defaultFps: Record<AdriAnimation, number> = {
     idle: 2,
-    run: 6,
+    run: 5,
     jump: 4,
     shout: 6,
     hit: 6,
