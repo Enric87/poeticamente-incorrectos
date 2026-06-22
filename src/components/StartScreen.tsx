@@ -4,16 +4,11 @@ import startScreenFull from "../assets/backgrounds/start_screen_full.jpg";
 interface StartScreenProps {
   onPlay: () => void;
   onSelectCharacter: () => void;
+  onToggleMute: () => void;
+  muted: boolean;
 }
 
-/**
- * Pantalla de inicio usando la composición completa de referencia.
- * La imagen se renderiza con <img> + object-contain dentro de un
- * contenedor con aspect-ratio fijo (16:9, igual que la imagen original),
- * así los botones superpuestos en % SIEMPRE coinciden con los botones
- * dibujados, sin importar el tamaño real de pantalla.
- */
-export function StartScreen({ onPlay, onSelectCharacter }: StartScreenProps) {
+export function StartScreen({ onPlay, onSelectCharacter, onToggleMute, muted }: StartScreenProps) {
   return (
     <div className="relative w-full h-full flex flex-col">
       <HUD credit={0} score={12580} />
@@ -59,6 +54,13 @@ export function StartScreen({ onPlay, onSelectCharacter }: StartScreenProps) {
           />
         </div>
       </div>
+      <button
+        onClick={onToggleMute}
+        className="absolute bottom-2 right-3 z-20 text-lg text-[var(--pi-teal)] hover:text-[var(--pi-orange)] transition-colors"
+        title={muted ? "Activar música" : "Silenciar música"}
+      >
+        {muted ? "🔇" : "🔊"}
+      </button>
     </div>
   );
 }
