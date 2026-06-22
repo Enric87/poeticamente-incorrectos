@@ -61,11 +61,13 @@ export function LevelSelect({ onSelectLevel, onBack }: LevelSelectProps) {
               }
             >
               {lvl.thumbnail && (
-                <div className="absolute inset-0 bg-[var(--pi-bg)]/35" />
+                <div className="absolute inset-0 bg-[var(--pi-bg)]/20" />
               )}
-              <span className="relative text-xs sm:text-base drop-shadow-[1px_1px_0_var(--pi-bg)]">
-                {lvl.name.toUpperCase()}
-              </span>
+              {!lvl.thumbnail && (
+                <span className="relative text-xs sm:text-base drop-shadow-[1px_1px_0_var(--pi-bg)]">
+                  {lvl.name.toUpperCase()}
+                </span>
+              )}
               {!lvl.available && (
                 <span className="relative text-[8px] sm:text-[9px] text-[var(--pi-red)] pi-blink">
                   PRÓXIMAMENTE
