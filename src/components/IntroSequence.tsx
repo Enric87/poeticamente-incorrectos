@@ -79,7 +79,7 @@ function SceneTransition({ onContinue }: { onContinue: () => void }) {
             src={c.portrait}
             alt={c.name}
             draggable={false}
-            className="h-20 sm:h-28 object-contain drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]"
+            className="w-16 sm:w-24 object-contain drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]"
             style={{ imageRendering: "pixelated" }}
           />
         ))}
