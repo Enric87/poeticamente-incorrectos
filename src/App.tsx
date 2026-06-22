@@ -9,7 +9,7 @@ import { CharacterSelect } from "./components/CharacterSelect";
 type Screen = "splash" | "start" | "select" | "intro" | "levelSelect" | "level";
 
 function App() {
-  const [screen, setScreen] = useState<Screen>("splash");
+  const [screen, setScreen] = useState<Screen>("start");
   const audioRef = useRef<HTMLAudioElement>(null);
   const [muted, setMuted] = useState(false);
 
