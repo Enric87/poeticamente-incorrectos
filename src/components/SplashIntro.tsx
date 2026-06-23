@@ -62,7 +62,7 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
             <img
               src={logoFull}
               alt="Poéticamente Incorrectos"
-              className="w-48 sm:w-72 drop-shadow-[0_0_40px_rgba(255,120,0,0.6)]"
+              className="w-48 sm:w-72"
               style={{ mixBlendMode: "multiply" }}
             />
             <p className="font-pixel text-[var(--pi-teal)] text-xs sm:text-sm tracking-widest uppercase mt-2">
