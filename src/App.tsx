@@ -1,12 +1,11 @@
 import { useRef, useState } from "react";
 import { SplashIntro } from "./components/SplashIntro";
 import { StartScreen } from "./components/StartScreen";
-import { IntroSequence } from "./components/IntroSequence";
 import { LevelSelect } from "./components/LevelSelect";
 import { LevelPreview } from "./components/LevelPreview";
 import { CharacterSelect } from "./components/CharacterSelect";
 
-type Screen = "splash" | "start" | "select" | "intro" | "levelSelect" | "level";
+type Screen = "splash" | "start" | "select" | "levelSelect" | "level";
 
 function App() {
   const [screen, setScreen] = useState<Screen>("splash");
@@ -56,7 +55,7 @@ function App() {
 
         {screen === "select" && (
           <CharacterSelect
-            onConfirm={() => goTo("intro")}
+            onConfirm={() => goTo("levelSelect")}
             onBack={() => goTo("start")}
           />
         )}
