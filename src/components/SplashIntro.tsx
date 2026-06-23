@@ -18,15 +18,13 @@ interface SplashIntroProps {
 export function SplashIntro({ onFinished }: SplashIntroProps) {
   const [stage, setStage] = useState<Stage>("logo");
   const [lineIndex, setLineIndex] = useState(0);
-  const [logoVisible, setLogoVisible] = useState(false);
   const onFinishedRef = useRef(onFinished);
   onFinishedRef.current = onFinished;
 
-  // Logo aparece
+  // Logo aparece y pasa a texto
   useEffect(() => {
-    const t = setTimeout(() => setLogoVisible(true), 300);
-    const t2 = setTimeout(() => setStage("text"), 3000);
-    return () => { clearTimeout(t); clearTimeout(t2); };
+    const t = setTimeout(() => setStage("text"), 3000);
+    return () => clearTimeout(t);
   }, []);
 
   // Texto línea a línea
@@ -60,7 +58,7 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
             }
             .logo-grow { animation: logo-grow 2.2s cubic-bezier(0.22,1,0.36,1) forwards; }
           `}</style>
-          <div className="flex flex-col items-center gap-2 logo-grow">
+          <div className="flex flex-col items-center gap-2 logo-grow" >
             <img
               src={logoFull}
               alt="Poéticamente Incorrectos"
