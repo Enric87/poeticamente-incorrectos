@@ -6,14 +6,16 @@ const lines = [
   "La banda acaba de terminar el mejor ensayo de los últimos meses.",
   "Mañana tocan en la Fiesta de la Cerveza de Figueres.",
   "De repente… luces de una furgoneta negra.",
-  "Cuatro hombres de traje. Sin decir una palabra.",
-  "Se llevan todos los instrumentos.",
-  "En 2 minutos han desaparecido.",
 ];
 
 const grafiti = '"El ruido ha terminado. — Los Correctos Supremos"';
 
+// Sub-fases de la escena del robo
+type ScenePhase = "van-arrives" | "men-out" | "stealing" | "loading" | "van-leaves";
 type Stage = "text" | "scene" | "grafiti" | "response";
+
+const instruments = ["🎸", "🎸", "🎷", "🥁"];
+const men = ["🕴️", "🕴️", "🕴️", "🕴️"];
 
 interface Props {
   onFinished: () => void;
@@ -22,35 +24,41 @@ interface Props {
 export function CinematicRobo({ onFinished }: Props) {
   const [stage, setStage] = useState<Stage>("text");
   const [lineIndex, setLineIndex] = useState(0);
-  const [showVan, setShowVan] = useState(false);
-  const [vanLeaving, setVanLeaving] = useState(false);
+  const [scenePhase, setScenePhase] = useState<ScenePhase>("van-arrives");
+  const [caption, setCaption] = useState("");
   const [showGrafiti, setShowGrafiti] = useState(false);
   const [showResponse, setShowResponse] = useState(false);
   const onFinishedRef = useRef(onFinished);
   onFinishedRef.current = onFinished;
 
-  // Líneas de texto
+  // Líneas de texto intro
   useEffect(() => {
     if (stage !== "text") return;
     if (lineIndex < lines.length) {
       const t = setTimeout(() => setLineIndex((i) => i + 1), 1900);
       return () => clearTimeout(t);
     } else {
-      const t = setTimeout(() => setStage("scene"), 600);
+      const t = setTimeout(() => { setStage("scene"); setScenePhase("van-arrives"); }, 600);
       return () => clearTimeout(t);
     }
   }, [stage, lineIndex]);
 
-  // Escena de la furgoneta
+  // Secuencia de la escena del robo
   useEffect(() => {
     if (stage !== "scene") return;
-    const t1 = setTimeout(() => setShowVan(true), 400);
-    const t2 = setTimeout(() => setVanLeaving(true), 3000);
-    const t3 = setTimeout(() => setStage("grafiti"), 5000);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    timers.push(setTimeout(() => { setScenePhase("van-arrives"); setCaption("Una furgoneta negra para delante del local."); }, 200));
+    timers.push(setTimeout(() => { setScenePhase("men-out");    setCaption("Cuatro hombres de traje bajan en silencio."); }, 2200));
+    timers.push(setTimeout(() => { setScenePhase("stealing");   setCaption("Entran. Cogen todos los instrumentos."); }, 4500));
+    timers.push(setTimeout(() => { setScenePhase("loading");    setCaption("Los cargan en la furgoneta."); }, 7000));
+    timers.push(setTimeout(() => { setScenePhase("van-leaves"); setCaption("En 2 minutos… han desaparecido."); }, 9000));
+    timers.push(setTimeout(() => setStage("grafiti"), 11500));
+
+    return () => timers.forEach(clearTimeout);
   }, [stage]);
 
-  // Grafiti en la pared
+  // Grafiti
   useEffect(() => {
     if (stage !== "grafiti") return;
     const t1 = setTimeout(() => setShowGrafiti(true), 500);
@@ -76,15 +84,37 @@ export function CinematicRobo({ onFinished }: Props) {
     >
       <style>{`
         @keyframes van-enter {
-          0%   { transform: translateX(60vw); }
+          0%   { transform: translateX(120%); }
           100% { transform: translateX(0); }
         }
         @keyframes van-leave {
           0%   { transform: translateX(0); opacity: 1; }
-          100% { transform: translateX(-80vw); opacity: 0; }
+          100% { transform: translateX(-120%); opacity: 0; }
+        }
+        @keyframes man-enter {
+          0%   { transform: translateX(80px); opacity: 0; }
+          100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes man-steal {
+          0%   { transform: translateY(0); }
+          30%  { transform: translateY(-8px); }
+          60%  { transform: translateY(4px); }
+          100% { transform: translateY(0); }
+        }
+        @keyframes man-load {
+          0%   { transform: translateX(0); opacity: 1; }
+          100% { transform: translateX(60px); opacity: 0; }
+        }
+        @keyframes instrument-stolen {
+          0%   { transform: translateY(0) scale(1); opacity: 1; }
+          100% { transform: translateY(-30px) scale(0.5); opacity: 0; }
+        }
+        @keyframes instrument-appear {
+          0%   { opacity: 0; transform: scale(0.5); }
+          100% { opacity: 1; transform: scale(1); }
         }
         @keyframes grafiti-appear {
-          0%   { opacity: 0; transform: scale(1.1); }
+          0%   { opacity: 0; transform: scale(1.08); }
           100% { opacity: 1; transform: scale(1); }
         }
         @keyframes fade-in-up {
@@ -93,14 +123,27 @@ export function CinematicRobo({ onFinished }: Props) {
         }
         @keyframes lights-flash {
           0%, 100% { opacity: 0; }
-          10%, 30%, 50% { opacity: 1; }
-          20%, 40% { opacity: 0.3; }
+          15%, 45% { opacity: 1; }
+          30% { opacity: 0.2; }
         }
-        .van-entering { animation: van-enter 1.2s cubic-bezier(0.22,1,0.36,1) forwards; }
-        .van-leaving  { animation: van-leave 1.5s ease-in forwards; }
-        .grafiti-anim { animation: grafiti-appear 0.8s ease-out forwards; }
-        .fade-up      { animation: fade-in-up 0.6s ease-out forwards; }
-        .lights-anim  { animation: lights-flash 1.5s ease-in-out; }
+        .van-entering   { animation: van-enter 1.2s cubic-bezier(0.22,1,0.36,1) forwards; }
+        .van-leaving    { animation: van-leave 2s ease-in forwards; }
+        .man-entering   { animation: man-enter 0.5s ease-out forwards; }
+        .man-stealing   { animation: man-steal 0.6s ease-in-out infinite; }
+        .man-loading    { animation: man-load 0.8s ease-in forwards; }
+        .instrument-stolen { animation: instrument-stolen 0.5s ease-in forwards; }
+        .instrument-appear { animation: instrument-appear 0.4s ease-out forwards; }
+        .grafiti-anim   { animation: grafiti-appear 0.8s ease-out forwards; }
+        .fade-up        { animation: fade-in-up 0.6s ease-out forwards; }
+        .lights-anim    { animation: lights-flash 2s ease-in-out; }
+        .caption-box {
+          position: absolute;
+          bottom: 2rem;
+          left: 50%;
+          transform: translateX(-50%);
+          text-align: center;
+          z-index: 30;
+        }
       `}</style>
 
       {/* FASE TEXTO */}
@@ -110,7 +153,7 @@ export function CinematicRobo({ onFinished }: Props) {
             <p
               key={i}
               className="font-pixel text-[var(--pi-cream)] text-xs sm:text-sm leading-relaxed"
-              style={{ opacity: i === lineIndex - 1 ? 1 : 0.5 }}
+              style={{ opacity: i === lineIndex - 1 ? 1 : 0.45 }}
             >
               {line}
             </p>
@@ -121,35 +164,93 @@ export function CinematicRobo({ onFinished }: Props) {
         </div>
       )}
 
-      {/* FASE ESCENA — furgoneta */}
+      {/* FASE ESCENA — el robo */}
       {stage === "scene" && (
         <div
           className="relative w-full h-full flex items-end justify-center bg-cover bg-center"
           style={{ backgroundImage: `url(${navataBg})` }}
         >
-          <div className="absolute inset-0 bg-black/60" />
+          <div className="absolute inset-0 bg-black/65" />
 
-          {/* Luces de la furgoneta */}
-          {showVan && !vanLeaving && (
+          {/* Luces de la furgoneta al llegar */}
+          {scenePhase === "van-arrives" && (
             <div
               className="absolute inset-0 lights-anim"
-              style={{ background: "radial-gradient(ellipse at 60% 50%, rgba(255,200,100,0.15) 0%, transparent 60%)" }}
+              style={{ background: "radial-gradient(ellipse at 75% 50%, rgba(255,220,120,0.2) 0%, transparent 55%)" }}
             />
           )}
 
-          {/* La furgoneta */}
-          {showVan && (
-            <div
-              className={`absolute bottom-[15%] right-[5%] text-6xl sm:text-8xl z-10 ${vanLeaving ? "van-leaving" : "van-entering"}`}
-            >
-              🚐
+          {/* FURGONETA */}
+          <div
+            className={`absolute bottom-[18%] right-[6%] z-20 select-none
+              ${scenePhase === "van-arrives" ? "van-entering" : ""}
+              ${scenePhase === "van-leaves" ? "van-leaving" : ""}
+            `}
+            style={{ fontSize: "clamp(48px, 8vw, 80px)", lineHeight: 1 }}
+          >
+            🚐
+          </div>
+
+          {/* INSTRUMENTOS en el suelo (antes del robo) */}
+          {(scenePhase === "men-out") && (
+            <div className="absolute bottom-[28%] left-[20%] flex gap-4 z-10">
+              {instruments.map((inst, i) => (
+                <span
+                  key={i}
+                  className="instrument-appear select-none"
+                  style={{ fontSize: "clamp(20px, 3vw, 32px)", animationDelay: `${i * 0.1}s`, opacity: 0 }}
+                >
+                  {inst}
+                </span>
+              ))}
             </div>
           )}
 
-          {/* Texto escena */}
-          <div className="relative z-20 mb-8 text-center px-4">
-            <p className="font-pixel text-[var(--pi-cream)] text-xs sm:text-sm opacity-80">
-              {vanLeaving ? "La furgoneta desaparece en la noche…" : "Cuatro hombres de traje bajan de la furgoneta."}
+          {/* HOMBRES DE TRAJE */}
+          {(scenePhase === "men-out" || scenePhase === "stealing" || scenePhase === "loading") && (
+            <div className="absolute bottom-[22%] left-[15%] flex gap-2 sm:gap-4 z-20">
+              {men.map((man, i) => (
+                <div key={i} className="flex flex-col items-center gap-1">
+                  <span
+                    className={`select-none
+                      ${scenePhase === "men-out" ? "man-entering" : ""}
+                      ${scenePhase === "stealing" ? "man-stealing" : ""}
+                      ${scenePhase === "loading" ? "man-loading" : ""}
+                    `}
+                    style={{
+                      fontSize: "clamp(22px, 3.5vw, 40px)",
+                      animationDelay: scenePhase === "men-out" ? `${i * 0.15}s` : `${i * 0.1}s`,
+                      display: "inline-block",
+                    }}
+                  >
+                    {man}
+                  </span>
+                  {/* Instrumento robado encima del hombre */}
+                  {scenePhase === "loading" && (
+                    <span
+                      className="instrument-stolen select-none"
+                      style={{
+                        fontSize: "clamp(14px, 2vw, 22px)",
+                        position: "absolute",
+                        top: "-20px",
+                        animationDelay: `${i * 0.1}s`,
+                      }}
+                    >
+                      {instruments[i]}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Caption */}
+          <div className="caption-box w-full px-4">
+            <p
+              key={caption}
+              className="font-pixel text-[var(--pi-cream)] text-xs sm:text-sm opacity-90 fade-up"
+            >
+              {caption}
             </p>
           </div>
         </div>
@@ -161,12 +262,12 @@ export function CinematicRobo({ onFinished }: Props) {
           className="relative w-full h-full flex items-center justify-center bg-cover bg-center"
           style={{ backgroundImage: `url(${navataBg})` }}
         >
-          <div className="absolute inset-0 bg-black/75" />
+          <div className="absolute inset-0 bg-black/78" />
           <div className="relative z-10 text-center px-8 max-w-2xl">
             {showGrafiti && (
               <p
                 className="font-pixel text-[var(--pi-orange)] text-sm sm:text-xl leading-relaxed grafiti-anim"
-                style={{ textShadow: "0 0 20px rgba(255,100,0,0.6)" }}
+                style={{ textShadow: "0 0 24px rgba(255,100,0,0.7)" }}
               >
                 {grafiti}
               </p>
