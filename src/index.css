@@ -82,6 +82,16 @@ body {
   );
 }
 
+.crt-splash {
+  background: #000 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+.crt-splash::before,
+.crt-splash::after {
+  display: none !important;
+}
+
 @keyframes crt-flicker {
   0%,
   100% {
