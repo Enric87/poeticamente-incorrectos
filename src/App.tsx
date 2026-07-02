@@ -37,14 +37,10 @@ function App() {
   };
 
   return (
-    <div className={`w-full min-h-screen flex items-center justify-center p-2 sm:p-6 ${screen === "splash" ? "bg-white" : "bg-black"}`}>
+    <div className="w-full min-h-screen flex items-center justify-center bg-black p-2 sm:p-6">
       <audio ref={audioRef} src="/music-start.mp3" loop />
       <div
-        className="crt-screen w-full max-w-5xl h-[92vh] sm:h-auto sm:aspect-video border-4 sm:border-8 rounded-md overflow-hidden"
-        style={screen === "splash"
-          ? { border: "none", boxShadow: "none", background: "#ffffff" }
-          : { borderColor: "var(--pi-brown-dark)" }
-        }
+        className="crt-screen w-full max-w-5xl h-[92vh] sm:h-auto sm:aspect-video border-4 sm:border-8 border-[var(--pi-brown-dark)] rounded-md overflow-hidden"
       >
 
         {screen === "splash" && (

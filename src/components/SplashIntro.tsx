@@ -44,7 +44,7 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
   return (
     <div
       className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden cursor-pointer"
-      style={{ background: "#ffffff" }}
+      style={{ background: "#000000" }}
       onClick={skip}
     >
       {/* LOGO */}
@@ -63,6 +63,7 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
               src={logoFull}
               alt="Poéticamente Incorrectos"
               className="w-48 sm:w-72"
+              style={{ mixBlendMode: "multiply" }}
             />
             <p className="font-pixel text-[var(--pi-teal)] text-xs sm:text-sm tracking-widest uppercase mt-2">
               — The Video Game —
@@ -75,7 +76,7 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
       {stage === "text" && (
         <div className="flex flex-col items-center gap-3 text-center max-w-xl px-4">
           {splashLines.slice(0, lineIndex).map((line, i) => (
-            <p key={i} className="font-pixel text-[var(--pi-bg)] text-xs sm:text-base leading-relaxed opacity-90">
+            <p key={i} className="font-pixel text-[var(--pi-cream)] text-xs sm:text-base leading-relaxed opacity-90">
               {line}
             </p>
           ))}
@@ -86,7 +87,7 @@ export function SplashIntro({ onFinished }: SplashIntroProps) {
       )}
 
       {/* Skip */}
-      <p className="absolute bottom-3 right-4 font-pixel text-[9px] sm:text-[11px] text-[var(--pi-bg)] opacity-40">
+      <p className="absolute bottom-3 right-4 font-pixel text-[9px] sm:text-[11px] text-[var(--pi-cream)] opacity-40">
         clic para saltar
       </p>
     </div>
