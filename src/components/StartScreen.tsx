@@ -3,12 +3,13 @@ import startScreenFull from "../assets/backgrounds/start_screen_full.jpg";
 
 interface StartScreenProps {
   onPlay: () => void;
+  onViewIntro: () => void;
   onSelectCharacter: () => void;
   onToggleMute: () => void;
   muted: boolean;
 }
 
-export function StartScreen({ onPlay, onSelectCharacter, onToggleMute, muted }: StartScreenProps) {
+export function StartScreen({ onPlay, onViewIntro, onSelectCharacter, onToggleMute, muted }: StartScreenProps) {
   return (
     <div className="relative w-full h-full flex flex-col">
       <HUD credit={0} score={12580} />
@@ -32,7 +33,7 @@ export function StartScreen({ onPlay, onSelectCharacter, onToggleMute, muted }: 
 
           {/* VER INTRO */}
           <button
-            onClick={onPlay}
+            onClick={onViewIntro}
             aria-label="Ver intro"
             className="absolute hover:opacity-80"
             style={{ left: "27%", top: "84%", width: "13%", height: "6%" }}

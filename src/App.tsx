@@ -4,8 +4,9 @@ import { StartScreen } from "./components/StartScreen";
 import { LevelSelect } from "./components/LevelSelect";
 import { LevelPreview } from "./components/LevelPreview";
 import { CharacterSelect } from "./components/CharacterSelect";
+import { CinematicRobo } from "./components/CinematicRobo";
 
-type Screen = "splash" | "start" | "select" | "levelSelect" | "level";
+type Screen = "splash" | "start" | "select" | "cinematic" | "levelSelect" | "level";
 
 function App() {
   const [screen, setScreen] = useState<Screen>("splash");
@@ -47,10 +48,15 @@ function App() {
         {screen === "start" && (
           <StartScreen
             onPlay={() => goTo("levelSelect")}
+            onViewIntro={() => goTo("cinematic")}
             onSelectCharacter={() => goTo("select")}
             onToggleMute={toggleMute}
             muted={muted}
           />
+        )}
+
+        {screen === "cinematic" && (
+          <CinematicRobo onFinished={() => goTo("levelSelect")} />
         )}
 
         {screen === "select" && (
